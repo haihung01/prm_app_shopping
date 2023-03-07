@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shopping_2">
+
+    <!-- Đầu tiên ta tạo một ImageView để chứa hình ảnh logo của ứng dụng -->
+
+    <!-- Tiếp theo ta tạo một LinearLayout để chứa EditText và Button -->
+
+    <ImageView
+        android:id="@+id/imageViewLogo"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="172dp"
+        android:layout_marginBottom="0dp"
+        android:src="@drawable/tgdd" />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageViewLogo"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="125dp"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- EditText để nhập tên đăng nhập -->
+        <EditText
+            android:id="@+id/editTextUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/layout_form_product"
+            android:hint="Email or phone"
+            android:inputType="text"
+            android:padding="12dp" />
+
+        <!-- EditText để nhập mật khẩu -->
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/layout_form_product"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="12dp" />
+
+        <!--        &lt;!&ndash; Nút đăng nhập &ndash;&gt;-->
+        <!--        <Button-->
+        <!--            android:id="@+id/buttonLogin"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="16dp"-->
+        <!--            android:background="@android:color/holo_green_light"-->
+        <!--            android:text="Đăng nhập"-->
+        <!--            android:textColor="#616161"-->
+        <!--            android:textSize="16sp"-->
+        <!--            android:textStyle="bold" />-->
+
+        <!--        &lt;!&ndash; Nút đăng ký &ndash;&gt;-->
+        <!--        <Button-->
+        <!--            android:id="@+id/buttonRegister"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="8dp"-->
+        <!--            android:background="@color/orange"-->
+        <!--            android:text="Đăng ký"-->
+        <!--            android:textColor="#616161"-->
+        <!--            android:textSize="16sp"-->
+        <!--            android:textStyle="bold" />-->
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/ButtonLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/layout_form_product"
+            android:backgroundTint="@color/blue"
+            android:text="Login"
+            android:textColor="@color/white" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttomRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="25dp"
+            android:background="@drawable/layout_form_product"
+            android:backgroundTint="@color/blue"
+            android:text="Register"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="181dp"
+        android:text="LOGIN"
+        android:textStyle="bold"
+        android:textColor="@color/mycolor"
+        android:textSize="40dp"
+
+        />
+
+</RelativeLayout>
