@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,8 +18,16 @@ import com.example.prm_app_shopping.databinding.ItemProductBinding;
 import com.example.prm_app_shopping.model.Product;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>{
+
+    private List<Product> mListProdcut;
+
+    public ProductAdapter(List<Product> mListProdcut) {
+        this.mListProdcut = mListProdcut;
+    }
+
 
     Context context;
     ArrayList<Product> products;
@@ -49,40 +59,37 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 intent.putExtra("name", product.getName());
                 intent.putExtra("image", product.getImage());
                 intent.putExtra("price", product.getPrice());
+                intent.putExtra("status", product.getStatus());
                 context.startActivity(intent);
 
             }
         });
 
-////-------------- chuyen trang
-//        Glide.with(context)
-//                .load(product.getImage())
-//                .into(holder.binding.image);
-//
-//        // set on click listener for the whole item
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(context, ProductDetailActivity.class);
-//                intent.putExtra("product_id", product.getId());
-//                context.startActivity(intent);
-//            }
-//        });
-
     }
 
     @Override
     public int getItemCount() {
+        if (mListProdcut != null) {
+            return mListProdcut.size();
+
+        }
         return products.size();
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder {
+
+        private ImageView img;
+        private TextView label, price;
 
         ItemProductBinding binding;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = ItemProductBinding.bind(itemView);
+
+            img = itemView.findViewById(R.id.image);
+            label = itemView.findViewById(R.id.label);
+            price = itemView.findViewById(R.id.price);
         }
     }
 }

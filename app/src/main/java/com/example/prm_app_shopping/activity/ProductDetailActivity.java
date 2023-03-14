@@ -41,6 +41,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         String name = getIntent().getStringExtra("name");
         String image = getIntent().getStringExtra("image");
+        String status = getIntent().getStringExtra("status");
 //        int id = getIntent().getIntExtra("id", 0);
         double price = getIntent().getDoubleExtra("price", 0);
 
@@ -61,6 +62,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         productName.setText(name);
         productPrice.setText(String.valueOf(price)) ;
+        productNote.setText(status);
 //
 //// set the product information in the TextViews
 //        label.setText(product.getName());

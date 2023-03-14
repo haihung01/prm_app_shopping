@@ -22,9 +22,11 @@
 
     <TextView
         android:id="@+id/textViewProductDetail"
+        android:textColor="@color/black"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:textSize="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/productImage"
@@ -32,18 +34,21 @@
 
     <TextView
         android:id="@+id/textViewProductDetail2"
+        android:textColor="#FF0000"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
+        android:textSize="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/productImage"
         app:layout_constraintTop_toBottomOf="@+id/productImage"/>
     <TextView
         android:id="@+id/textViewProductDetail3"
+        android:textColor="@color/black"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="78dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/productImage"

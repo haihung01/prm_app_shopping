@@ -101,23 +101,4 @@
 
     </androidx.core.widget.NestedScrollView>
 
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--                android:id="@+id/fab"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:src="@drawable/ic_launcher_foreground"-->
-<!--                app:layout_anchor="@id/cardView5"-->
-<!--                app:layout_anchorGravity="bottom|end"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_margin="16dp"-->
-<!--           tools:ignore="NotSibling" />-->
-
-
-
-
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
