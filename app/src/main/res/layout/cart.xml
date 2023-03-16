@@ -16,46 +16,53 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <ImageView
-            android:layout_marginLeft="10dp"
-            app:srcCompat="@drawable/tivi"
+            android:id="@+id/image"
             android:layout_width="100dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            app:srcCompat="@drawable/tivi" />
         <LinearLayout
             android:layout_marginLeft="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Ti vi LG 60in"
+                android:textColor="@color/black"
                 android:textSize="20dp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nhập khẩu: China"/>
+
             <TextView
+                android:id="@+id/year"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Năm sản xuất: 2020"/>
+                android:text="Năm sản xuất: 2020" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
+
                 <TextView
-                    android:layout_gravity="bottom"
+                    android:id="@+id/price"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:text="$ 99.0"
-                    android:textStyle="bold"
-                    android:textSize="17dp"
                     android:textColor="@color/black"
-                    />
+                    android:textSize="17dp"
+                    android:textStyle="bold" />
                 <LinearLayout
                     android:gravity="center"
                     android:layout_width="wrap_content"
@@ -67,15 +74,16 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_marginRight="7dp"/>
+
                     <TextView
+                        android:id="@+id/quantity"
                         android:layout_width="20dp"
-                        android:gravity="center_horizontal"
                         android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
                         android:text="1"
-                        android:textSize="17dp"
-                        android:textStyle="bold"
                         android:textColor="@color/black"
-                        />
+                        android:textSize="17dp"
+                        android:textStyle="bold" />
                     <ImageButton
                         android:id="@+id/ButtonPlus"
                         android:background="@drawable/plus"
