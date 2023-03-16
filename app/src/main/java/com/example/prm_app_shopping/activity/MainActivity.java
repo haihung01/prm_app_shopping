@@ -44,17 +44,6 @@ public class MainActivity extends AppCompatActivity {
         initProducts();
         initSlider();
 
-//
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//
-//        // Set a listener to handle the button click event
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // Do something when the button is clicked
-//                Toast.makeText(MainActivity.this, "Floating Action Button Clicked", Toast.LENGTH_SHORT).show();
-//            }
-//        });
         card = (ImageView) findViewById(R.id.iconCard);
         card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,11 +75,9 @@ public class MainActivity extends AppCompatActivity {
     void initCategories(){
         categories = new ArrayList<>();
         categories.add(new Category("Các loại Tivi ngon ", "", "#18ab4e", "Some description", 1));
-        categories.add(new Category("Các loại Máy lạnh ngon", "", "#fb0504", "Some description", 1));
-//        categories.add(new Category("Các loại Máy giặt ngon", "", "#4186ff", "Some description", 1));
-//        categories.add(new Category("Các loại Máy lọc nước ngon", "", "#BF360C", "Some description", 1));
-        categories.add(new Category("Các loại Bếp ngon", "", "#ff870e", "Some description", 1));
-        categories.add(new Category("Khác", "", "#ff6f52", "Some description", 1));
+        categories.add(new Category("Các loại Máy lạnh ngon", "", "#fb0504", "Some description", 2));
+        categories.add(new Category("Các loại Bếp ngon", "", "#ff870e", "Some description", 3));
+        categories.add(new Category("Khác", "", "#ff6f52", "Some description", 4));
 
 
         categoryAdapter = new CategoryAdapter(this, categories);
@@ -128,22 +115,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        products = new ArrayList<Product>();
-//
-//        products.add(new Product("Tủ lạnh Family Hub",
-//                "https://cdn11.dienmaycholon.vn/filewebdmclnew/DMCL21/Picture/Apro/Apro_product_29826/tu-lanh-lg-inve_main_845_450.png.webp", "", 12, 12, 1, 1));
-//        products.add(new Product("Máy lạnh Panasonic  ", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTX-4D8wC_xmUkxs-5DnvAlOc227my9GWQ9FqrdVOuozn3NHzPwYmcD3gFPN9NTzjYZttU&usqp=CAU", "", 13, 12, 1, 1));
-//        products.add(new Product("Máy giặt Panasonic Inverter ", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_6JWyFMoNBjwlEFCukBfC3tW8PVd8bK18eClb7uebP_SbqdeXO-QO6AIq0vXhPrZIFmk&usqp=CAU", "", 14, 12, 1, 1));
-//        products.add(new Product("Bếp gas hồng ngoại Taka TK-HG9 ", "https://kingshop.vn/data/products/500/bep-gas-hong-ngoai-taka-tk-hg9-2.jpg", "", 15, 12, 1, 1));
-//        products.add(new Product("Tivi SamSung", "https://cdn.tgdd.vn/Files/2018/02/03/1064416/top-5-tivi-samsung-ban-chay-nhat-thang-1-20181-2.jpg", "", 16, 12, 1, 1));
-//        products.add(new Product("Cây nước nóng lạnh Kangaroo KG39H", "https://bizweb.dktcdn.net/100/075/453/products/39h-4.jpg?v=1510199027280", "", 17, 12, 1, 1));
-//
-//
-//        productAdapter = new ProductAdapter(this, products);
-//
-//        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-//        binding.productList.setLayoutManager(layoutManager);
-//        binding.productList.setAdapter(productAdapter);
 
     }
 
