@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     CategoryAdapter categoryAdapter;
     ArrayList<Category> categories;
     ProductAdapter productAdapter;
-    ArrayList<Product> products = new ArrayList<Product>();
     ImageView card, history;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
