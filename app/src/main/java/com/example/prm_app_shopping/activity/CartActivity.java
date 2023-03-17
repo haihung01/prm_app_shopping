@@ -14,6 +14,7 @@ import com.example.prm_app_shopping.databinding.ActivityCardBinding;
 import com.example.prm_app_shopping.databinding.ActivityMainBinding;
 import com.example.prm_app_shopping.model.Cart;
 import com.example.prm_app_shopping.model.Product;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -22,6 +23,7 @@ public class CartActivity extends AppCompatActivity {
     TextView total;
     Button button;
     ArrayList<Cart> carts;
+    Cart cart;
     CartAdapter CartAdapter;
     ActivityCardBinding binding;
 
@@ -42,7 +44,10 @@ public class CartActivity extends AppCompatActivity {
     private void init() {
         carts =  new ArrayList<>();
         carts.add(new Cart(1,1, new Product("1","1","1",1,1,1,1,1)));
-
+        String cartJson = getIntent().getStringExtra("cart");
+        Gson gson = new Gson();
+        cart = gson.fromJson(cartJson, Cart.class);
+        carts.add(cart);
         CartAdapter = new CartAdapter(this,carts);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         binding.cartList.setLayoutManager(layoutManager);

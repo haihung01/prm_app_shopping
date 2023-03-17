@@ -2,6 +2,7 @@ package com.example.prm_app_shopping.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import com.example.prm_app_shopping.R;
 import com.example.prm_app_shopping.activity.ProductDetailActivity;
 import com.example.prm_app_shopping.databinding.ItemProductBinding;
 import com.example.prm_app_shopping.model.Product;
+import com.google.gson.Gson;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +63,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
                 intent.putExtra("image", product.getImage());
                 intent.putExtra("price", product.getPrice());
                 intent.putExtra("status", product.getStatus());
+                Gson gson = new Gson();
+                String json = gson.toJson(product);
+                intent.putExtra("product", json);
                 context.startActivity(intent);
 
             }

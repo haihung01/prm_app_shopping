@@ -12,17 +12,20 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.prm_app_shopping.R;
+import com.example.prm_app_shopping.adapters.ProductAdapter;
 import com.example.prm_app_shopping.databinding.ActivityProductDetailBinding;
+import com.example.prm_app_shopping.model.Cart;
+import com.example.prm_app_shopping.model.Product;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
     ActivityProductDetailBinding binding;
-//    ImageButton addQty, minusQty;
-//    TextView qtyValue, totalTxt, price;
-//    int q;
-//    int p;
-
-
+    Product product;
+    Cart cart;
 
 
     @Override
@@ -30,19 +33,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityProductDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-//        price = findViewById(R.id.textViewProductDetail2);
-//        qtyValue = findViewById(R.id.qty_value);
-//        addQty = findViewById(R.id.add_qty);
-//        minusQty = findViewById(R.id.qty_minus);
-//        totalTxt = findViewById(R.id.total);
 
-
-
-
+        String json = getIntent().getStringExtra("product");
+        Gson gson = new Gson();
+        product = gson.fromJson(json, Product.class);
         String name = getIntent().getStringExtra("name");
         String image = getIntent().getStringExtra("image");
         String status = getIntent().getStringExtra("status");
-//        int id = getIntent().getIntExtra("id", 0);
+
         double price = getIntent().getDoubleExtra("price", 0);
 
         Glide.with(this)
@@ -67,6 +65,12 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
     public void clickAdd(View view) {
+        cart= new Cart(product.getId(), product.getDiscount()* product.getPrice(), product);
+        Gson gson = new Gson();
+        String json = gson.toJson(cart);
+        Intent intent = new Intent(this, CartActivity.class);
+        intent.putExtra("cart", json);
+        startActivity(intent);
         Toast.makeText(this, "Order has been placed. ", Toast.LENGTH_SHORT).show();
         startActivity(new Intent( ProductDetailActivity.this, MainActivity.class ));
         finish();
