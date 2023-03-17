@@ -2,8 +2,11 @@ package com.example.prm_app_shopping.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -17,7 +20,9 @@ import com.example.prm_app_shopping.databinding.ActivityProductDetailBinding;
 import com.example.prm_app_shopping.model.Cart;
 import com.example.prm_app_shopping.model.Product;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +31,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     ActivityProductDetailBinding binding;
     Product product;
     Cart cart;
+    ArrayList<Cart> carts;
 
 
     @Override
@@ -40,7 +46,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         String name = getIntent().getStringExtra("name");
         String image = getIntent().getStringExtra("image");
         String status = getIntent().getStringExtra("status");
-
+        double discount = getIntent().getDoubleExtra("discount", 1);
         double price = getIntent().getDoubleExtra("price", 0);
 
         Glide.with(this)
@@ -65,12 +71,35 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
     public void clickAdd(View view) {
+        carts= new ArrayList<>();
         cart= new Cart(product.getId(), product.getDiscount()* product.getPrice(), product);
+        SharedPreferences sharedPreferences = getSharedPreferences("myCache", Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString("cartsList", null);
         Gson gson = new Gson();
-        String json = gson.toJson(cart);
-        Intent intent = new Intent(this, CartActivity.class);
-        intent.putExtra("cart", json);
-        startActivity(intent);
+        if (json != null) {
+            Type type = new TypeToken<ArrayList<Cart>>() {}.getType();
+            carts = gson.fromJson(json, type);
+            boolean find = false;
+            for (Cart item: carts
+                 ) {
+                if (item.getId()==cart.getId()){
+                    item.getProduct().setDiscount(item.getProduct().getDiscount()+1);
+                    find=true;
+                }
+            }
+            if(!find){
+                carts.add(cart);
+            }
+        }else {
+            carts.add(cart);
+        }
+
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        json = gson.toJson(carts); // Chuyển đổi đối tượng thành chuỗi JSON
+        editor.putString("cartsList", json);
+        editor.apply();
+
         Toast.makeText(this, "Order has been placed. ", Toast.LENGTH_SHORT).show();
         startActivity(new Intent( ProductDetailActivity.this, MainActivity.class ));
         finish();

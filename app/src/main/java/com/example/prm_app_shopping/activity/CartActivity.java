@@ -3,7 +3,10 @@ package com.example.prm_app_shopping.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,7 +18,9 @@ import com.example.prm_app_shopping.databinding.ActivityMainBinding;
 import com.example.prm_app_shopping.model.Cart;
 import com.example.prm_app_shopping.model.Product;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class CartActivity extends AppCompatActivity {
@@ -43,11 +48,13 @@ public class CartActivity extends AppCompatActivity {
 
     private void init() {
         carts =  new ArrayList<>();
-        carts.add(new Cart(1,1, new Product("1","1","1",1,1,1,1,1)));
-        String cartJson = getIntent().getStringExtra("cart");
+
+        SharedPreferences sharedPreferences = getSharedPreferences("myCache", Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString("cartsList", null);
         Gson gson = new Gson();
-        cart = gson.fromJson(cartJson, Cart.class);
-        carts.add(cart);
+        Type type = new TypeToken<ArrayList<Cart>>() {}.getType();
+        carts = gson.fromJson(json, type);
+
         CartAdapter = new CartAdapter(this,carts);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         binding.cartList.setLayoutManager(layoutManager);

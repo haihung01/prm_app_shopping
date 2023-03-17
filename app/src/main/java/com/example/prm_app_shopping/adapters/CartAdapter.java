@@ -2,6 +2,7 @@ package com.example.prm_app_shopping.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.example.prm_app_shopping.R;
 import com.example.prm_app_shopping.activity.ProductDetailActivity;
 import com.example.prm_app_shopping.databinding.CartBinding;
 import com.example.prm_app_shopping.model.Cart;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -37,25 +39,28 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
-        Cart cart = carts.get(position);
-        Glide.with(context)
-                .load(cart.getProduct().getImage())
-                .into(holder.binding.image);
-        holder.binding.title.setText(cart.getProduct().getName());
-        holder.binding.year.setText("Year model:"+cart.getProduct().getModel_year());
-        holder.binding.price.setText("$"+cart.getProduct().getPrice());
-        holder.binding.quantity.setText(String.valueOf((int) cart.getProduct().getDiscount()));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ProductDetailActivity.class);
-                intent.putExtra("name", cart.getProduct().getName());
-                intent.putExtra("image", cart.getProduct().getImage());
-                intent.putExtra("price", cart.getProduct().getPrice());
-                intent.putExtra("status", cart.getProduct().getStatus());
-                context.startActivity(intent);
-            }
-        });
+            Cart cart = carts.get(position);
+            Glide.with(context)
+                    .load(cart.getProduct().getImage())
+                    .into(holder.binding.image);
+            holder.binding.title.setText(cart.getProduct().getName());
+            holder.binding.year.setText("Year model:"+cart.getProduct().getModel_year());
+            holder.binding.price.setText("$"+cart.getProduct().getPrice());
+            holder.binding.quantity.setText(String.valueOf((int) cart.getProduct().getDiscount()));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ProductDetailActivity.class);
+                    intent.putExtra("name", cart.getProduct().getName());
+                    intent.putExtra("image", cart.getProduct().getImage());
+                    intent.putExtra("price", cart.getProduct().getPrice());
+                    intent.putExtra("status", cart.getProduct().getStatus());
+                    Gson gson = new Gson();
+                    String json = gson.toJson(cart.getProduct());
+                    intent.putExtra("product", json);
+                    context.startActivity(intent);
+                }
+            });
 
     }
 
