@@ -8,14 +8,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.prm_app_shopping.R;
-import com.example.prm_app_shopping.adapters.ProductAdapter;
 import com.example.prm_app_shopping.databinding.ActivityProductDetailBinding;
 import com.example.prm_app_shopping.model.Cart;
 import com.example.prm_app_shopping.model.Product;
@@ -24,7 +21,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
@@ -46,7 +42,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         String name = getIntent().getStringExtra("name");
         String image = getIntent().getStringExtra("image");
         String status = getIntent().getStringExtra("status");
-        double discount = getIntent().getDoubleExtra("discount", 1);
         double price = getIntent().getDoubleExtra("price", 0);
 
         Glide.with(this)
@@ -65,32 +60,35 @@ public class ProductDetailActivity extends AppCompatActivity {
         TextView productNote = findViewById(R.id.textViewProductDetail3);
 
         productName.setText(name);
-        productPrice.setText(String.valueOf(price)) ;
+        productPrice.setText(String.valueOf(price));
         productNote.setText(status);
     }
 
 
     public void clickAdd(View view) {
-        carts= new ArrayList<>();
-        cart= new Cart(product.getId(), product.getDiscount()* product.getPrice(), product);
+        carts = new ArrayList<>();
+        product.setDiscount(1);
+        cart = new Cart(product.getId(), product.getPrice(), product);
         SharedPreferences sharedPreferences = getSharedPreferences("myCache", Context.MODE_PRIVATE);
         String json = sharedPreferences.getString("cartsList", null);
         Gson gson = new Gson();
         if (json != null) {
-            Type type = new TypeToken<ArrayList<Cart>>() {}.getType();
+            Type type = new TypeToken<ArrayList<Cart>>() {
+            }.getType();
             carts = gson.fromJson(json, type);
             boolean find = false;
-            for (Cart item: carts
-                 ) {
-                if (item.getId()==cart.getId()){
-                    item.getProduct().setDiscount(item.getProduct().getDiscount()+1);
-                    find=true;
+            for (Cart item : carts
+            ) {
+                if (item.getId() == cart.getId()) {
+                    item.getProduct().setDiscount(item.getProduct().getDiscount() + 1);
+                    item.setTotal(item.getProduct().getPrice()*item.getProduct().getDiscount());
+                    find = true;
                 }
             }
-            if(!find){
+            if (!find) {
                 carts.add(cart);
             }
-        }else {
+        } else {
             carts.add(cart);
         }
 
@@ -101,13 +99,12 @@ public class ProductDetailActivity extends AppCompatActivity {
         editor.apply();
 
         Toast.makeText(this, "Order has been placed. ", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent( ProductDetailActivity.this, MainActivity.class ));
+        startActivity(new Intent(ProductDetailActivity.this, MainActivity.class));
         finish();
     }
 
 
-
-// goi ten san pham tren header
+    // goi ten san pham tren header
     @Override
     public boolean onSupportNavigateUp() {
         finish();

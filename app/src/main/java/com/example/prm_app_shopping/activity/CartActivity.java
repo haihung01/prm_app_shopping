@@ -23,7 +23,7 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class CartActivity extends AppCompatActivity {
+public class CartActivity extends AppCompatActivity implements CartAdapter.OnDataChangeListener{
     ListView listview;
     TextView total;
     Button button;
@@ -56,9 +56,14 @@ public class CartActivity extends AppCompatActivity {
         carts = gson.fromJson(json, type);
 
         CartAdapter = new CartAdapter(this,carts);
+        CartAdapter.setOnDataChangeListener(this);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         binding.cartList.setLayoutManager(layoutManager);
         binding.cartList.setAdapter(CartAdapter);
+    }
 
+    @Override
+    public void onDataChanged(double data) {
+        binding.totalPrice.setText("Thanh toan:"+data);
     }
 }
