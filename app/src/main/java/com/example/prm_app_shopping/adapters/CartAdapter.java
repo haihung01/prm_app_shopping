@@ -1,6 +1,8 @@
 package com.example.prm_app_shopping.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +23,10 @@ import com.example.prm_app_shopping.activity.ProductDetailActivity;
 import com.example.prm_app_shopping.databinding.CartBinding;
 import com.example.prm_app_shopping.model.Cart;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
@@ -71,10 +76,31 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             @Override
             public void onClick(View v) {
                 int quantity = (int) cart.getProduct().getDiscount();
-                if (quantity >= 1) {
+                if (quantity > 1) {
                     holder.binding.quantity.setText(String.valueOf(quantity - 1));
                     cart.getProduct().setDiscount(quantity - 1);
                     double total=cart.getProduct().getPrice() * (quantity-1);
+
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("myCache", Context.MODE_PRIVATE);
+                    String json = sharedPreferences.getString("cartsList", null);
+                    Gson gson = new Gson();
+                    if (json != null) {
+                        Type type = new TypeToken<ArrayList<Cart>>() {
+                        }.getType();
+                        carts = gson.fromJson(json, type);
+                        for (Cart item : carts
+                        ) {
+                            if (item.getId() == cart.getId()) {
+                                item.getProduct().setDiscount(item.getProduct().getDiscount() - 1);
+                                item.setTotal(item.getProduct().getPrice()*item.getProduct().getDiscount());
+                            }
+                        }
+                    }
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    json = gson.toJson(carts); // Chuyển đổi đối tượng thành chuỗi JSON
+                    editor.putString("cartsList", json);
+                    editor.apply();
+
                     cart.setTotal(total);
                     updateData(total);
                 }
@@ -87,8 +113,77 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 holder.binding.quantity.setText(String.valueOf(quantity + 1));
                 cart.getProduct().setDiscount(quantity + 1);
                 double total=cart.getProduct().getPrice() * (quantity+1);
+
+                SharedPreferences sharedPreferences = context.getSharedPreferences("myCache", Context.MODE_PRIVATE);
+                String json = sharedPreferences.getString("cartsList", null);
+                Gson gson = new Gson();
+                if (json != null) {
+                    Type type = new TypeToken<ArrayList<Cart>>() {
+                    }.getType();
+                    carts = gson.fromJson(json, type);
+                    for (Cart item : carts
+                    ) {
+                        if (item.getId() == cart.getId()) {
+                            item.getProduct().setDiscount(item.getProduct().getDiscount() + 1);
+                            item.setTotal(item.getProduct().getPrice()*item.getProduct().getDiscount());
+                        }
+                    }
+                }
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                json = gson.toJson(carts); // Chuyển đổi đối tượng thành chuỗi JSON
+                editor.putString("cartsList", json);
+                editor.apply();
+
                 cart.setTotal(total);
                 updateData(total);
+            }
+        });
+        holder.binding.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(context)
+                        .setTitle("Xóa sản phẩm")
+                        .setMessage("Bạn có chắc chắn muốn xóa sản phẩm này không?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                double total=0;
+                                for (Cart item :
+                                        carts) {
+                                    total = total+ item.getTotal();
+                                }
+                                carts.remove(position);
+                                notifyDataSetChanged();
+                                updateData(total);
+
+                                SharedPreferences sharedPreferences = context.getSharedPreferences("myCache", Context.MODE_PRIVATE);
+                                String json = sharedPreferences.getString("cartsList", null);
+                                Gson gson = new Gson();
+                                if (json != null) {
+                                    Type type = new TypeToken<ArrayList<Cart>>() {
+                                    }.getType();
+                                    carts = gson.fromJson(json, type);
+                                    for (Cart item : carts
+                                    ) {
+                                        if (item.getId() == cart.getId()) {
+                                            carts.remove(item);
+                                        }
+                                    }
+                                }
+
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                json = gson.toJson(carts); // Chuyển đổi đối tượng thành chuỗi JSON
+                                editor.putString("cartsList", json);
+                                editor.apply();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Không làm gì cả
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+
             }
         });
 
@@ -117,7 +212,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
     public class CartViewHolder extends RecyclerView.ViewHolder {
-        private ImageView img;
+        private ImageView img,delete;
         private TextView title, year, quantity, price;
 
         CartBinding binding;
@@ -131,6 +226,26 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             year = itemView.findViewById(R.id.year);
             quantity = itemView.findViewById(R.id.quantity);
             price = itemView.findViewById(R.id.price);
+            delete = itemView.findViewById(R.id.delete);
         }
     }
+    public class MySharedPreferences {
+        private SharedPreferences sharedPreferences;
+
+        public MySharedPreferences(Context context) {
+            sharedPreferences = context.getSharedPreferences("my_preferences", Context.MODE_PRIVATE);
+        }
+
+        public void saveData(String key, String value) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(key, value);
+            editor.apply();
+        }
+
+        public String getData(String key) {
+            return sharedPreferences.getString(key, null);
+        }
+    }
+
+
 }

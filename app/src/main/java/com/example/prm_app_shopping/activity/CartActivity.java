@@ -51,9 +51,11 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnDat
 
         SharedPreferences sharedPreferences = getSharedPreferences("myCache", Context.MODE_PRIVATE);
         String json = sharedPreferences.getString("cartsList", null);
-        Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<Cart>>() {}.getType();
-        carts = gson.fromJson(json, type);
+        if (json!=null){
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<Cart>>() {}.getType();
+            carts = gson.fromJson(json, type);
+        }
 
         CartAdapter = new CartAdapter(this,carts);
         CartAdapter.setOnDataChangeListener(this);
