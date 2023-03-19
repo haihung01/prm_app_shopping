@@ -57,6 +57,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, CategoryActivity.class);
+                intent.putExtra("category", category.getId());
                 intent.putExtra("product_id", category.getId());
                 context.startActivity(intent);
             }

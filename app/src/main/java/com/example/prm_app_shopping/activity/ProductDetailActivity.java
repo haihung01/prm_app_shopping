@@ -13,14 +13,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.prm_app_shopping.R;
 import com.example.prm_app_shopping.databinding.ActivityProductDetailBinding;
+import com.example.prm_app_shopping.model.Product;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
+    ImageButton addQty, minusQty;
     ActivityProductDetailBinding binding;
-//    ImageButton addQty, minusQty;
-//    TextView qtyValue, totalTxt, price;
-//    int q;
-//    int p;
+    TextView qtyValue, price;
+    int q;
+    int p;
 
 
 
@@ -30,10 +31,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityProductDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-//        price = findViewById(R.id.textViewProductDetail2);
-//        qtyValue = findViewById(R.id.qty_value);
-//        addQty = findViewById(R.id.add_qty);
-//        minusQty = findViewById(R.id.qty_minus);
+
+        price = findViewById(R.id.textViewProductDetail2);
+        qtyValue = findViewById(R.id.qty_value);
+        addQty = findViewById(R.id.add_qty);
+        minusQty = findViewById(R.id.qty_minus);
 //        totalTxt = findViewById(R.id.total);
 
 
@@ -44,6 +46,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         String status = getIntent().getStringExtra("status");
 //        int id = getIntent().getIntExtra("id", 0);
         double price = getIntent().getDoubleExtra("price", 0);
+//        TextView priceTextView = findViewById(R.id.textViewProductDetail2);
 
         Glide.with(this)
                 .load(image)
@@ -63,58 +66,44 @@ public class ProductDetailActivity extends AppCompatActivity {
         productName.setText(name);
         productPrice.setText(String.valueOf(price)) ;
         productNote.setText(status);
-//
-//// set the product information in the TextViews
-//        label.setText(product.getName());
-////        productPrice.setText(String.valueOf(product.getPrice()));
 
 
-//        // get product ID from Intent
-//        int productId = getIntent().getIntExtra("product_id", -1);
-//
-//        // TODO: use the product ID to fetch the product details from the database or API
-//
-//        // display the product details
-//        TextView productName = findViewById(R.id.label);
-//        TextView productPrice = findViewById(R.id.price);
-//        ImageView productImage = findViewById(R.id.image);
-//
-//        // TODO: set the product information in the TextViews and ImageView
-
-//        ------------------------------------------------
-//        String n = getIntent().getStringExtra("PName").toString();
-//        p = getIntent().getIntExtra("PPrice", 0);
-//        q = getIntent().getIntExtra("PQty", 0);
+        p = getIntent().getIntExtra("PPrice", 0);
+        q = getIntent().getIntExtra("PQty", 0);
 //
 //        name.setText(n);
-//        price.setText("Price: "+p);
-//        totalTxt.setText("Total: "+p);
+//        priceTextView.setText(String.valueOf(price));
+//        productPrice.setText("Price: "+p);
 
-//        addQty.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int qValue = Integer.parseInt(qtyValue.getText().toString());
-//                ++qValue;
+
+        addQty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int qValue = Integer.parseInt(qtyValue.getText().toString());
+                ++qValue;
+                qtyValue.setText(Integer.toString(qValue));
+
 //                if(qValue<=q) {
 //                    qtyValue.setText(Integer.toString(qValue));
 //                    int tot = p * qValue;
 //                    totalTxt.setText("Total: "+ tot);
 //                }
-//            }
-//        });
-//
-//        minusQty.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                int qValue = Integer.parseInt(qtyValue.getText().toString());
-//                --qValue;
+            }
+        });
+
+        minusQty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int qValue = Integer.parseInt(qtyValue.getText().toString());
+                --qValue;
+                qtyValue.setText(Integer.toString(qValue));
 //                if(qValue>0) {
 //                    qtyValue.setText(Integer.toString(qValue));
 //                    int tot = p * qValue;
 //                    totalTxt.setText("Total: "+ tot);
 //                }
-//            }
-//        });
+            }
+        });
     }
 
 
