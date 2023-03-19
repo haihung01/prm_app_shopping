@@ -1,6 +1,7 @@
 package com.example.prm_app_shopping.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +11,20 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.prm_app_shopping.R;
+import com.example.prm_app_shopping.adapters.CartAdapter;
+import com.example.prm_app_shopping.databinding.ActivityCardBinding;
+import com.example.prm_app_shopping.model.Cart;
+import com.example.prm_app_shopping.model.Product;
+
+import java.util.ArrayList;
 
 public class CartActivity extends AppCompatActivity {
     ListView listview;
     TextView total;
     Button button;
+    ArrayList<Cart> carts;
+    CartAdapter CartAdapter;
+    ActivityCardBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,27 +33,22 @@ public class CartActivity extends AppCompatActivity {
 
 //        init();
 
-        listview = (ListView) findViewById(R.id.cart_list);
-        total = (TextView) findViewById(R.id.total_price);
-        button = (Button) findViewById(R.id.checkout_button);
+//       listview = (ListView) findViewById(R.id.cart_list);
+//        total = (TextView) findViewById(R.id.total_price);
+//        button = (Button) findViewById(R.id.checkout_button);
     }
 
-//
-//    public void clickAdd(View view) {
-//        // Get the product information
-//        String productName = getIntent().getStringExtra("name");
-//        double productPrice = getIntent().getDoubleExtra("price", 0);
-//        int productQuantity = Integer.parseInt(qtyValue.getText().toString());
-//
-//        // Create an Intent to start the CartActivity
-//        Intent intent = new Intent(ProductDetailActivity.this, CartActivity.class);
-//
-//        // Add the product information to the Intent
-//        intent.putExtra("name", productName);
-//        intent.putExtra("price", productPrice);
-//        intent.putExtra("quantity", productQuantity);
-//
-//        // Start the CartActivity
-//        startActivity(intent);
-//    }
+
+    
+    private void init() {
+    carts =  new ArrayList<>();
+    carts.add(new Cart(1,1, new Product("1","1","1",1,1,1,1,1)));
+
+        CartAdapter = new CartAdapter(this,carts);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
+        binding.cartList.setLayoutManager(layoutManager);
+        binding.cartList.setAdapter(CartAdapter);
+
+    }
+
 }

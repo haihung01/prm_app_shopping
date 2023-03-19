@@ -34,8 +34,10 @@ public class MainActivity extends AppCompatActivity {
     CategoryAdapter categoryAdapter;
     ArrayList<Category> categories;
     ProductAdapter productAdapter;
+
     ImageView card, history, menu;
     DrawerLayout drawerLayout;
+
 
 
     @Override
