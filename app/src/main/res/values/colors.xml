@@ -11,5 +11,6 @@
     <color name="backgroundColor">#E8E8E8</color>
     <color name="grey_light">#f8f8f8</color>
     <color name="orange">#FF5722</color>
+    <color name="red">#F40A0A</color>
     <color name="mycolor">#F7F3F2</color>
 </resources>

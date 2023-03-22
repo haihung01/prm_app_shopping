@@ -2,22 +2,31 @@ package com.example.prm_app_shopping.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm_app_shopping.R;
 import com.example.prm_app_shopping.adapters.CategoryAdapter;
 import com.example.prm_app_shopping.adapters.ProductAdapter;
+import com.example.prm_app_shopping.adapters.SearchAdapter;
 import com.example.prm_app_shopping.api.ProductApiService;
 import com.example.prm_app_shopping.api.ProductApiService;
 import com.example.prm_app_shopping.databinding.ActivityMainBinding;
 import com.example.prm_app_shopping.model.Category;
 import com.example.prm_app_shopping.model.Product;
+import com.google.gson.Gson;
 
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
 
@@ -27,6 +36,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView card, history, menu;
     DrawerLayout drawerLayout;
+    androidx.recyclerview.widget.RecyclerView rcvProduct;
+
+    AutoCompleteTextView atcProductSearch;
 
 
 
@@ -46,22 +60,23 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        rcvProduct = findViewById(R.id.productList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rcvProduct.setLayoutManager(linearLayoutManager);
+
+        productAdapter = new ProductAdapter(getListProduct());
+//        rcvProduct.setAdapter(productAdapter);
+//
+//        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+//        rcvProduct.addItemDecoration(itemDecoration);
+
         initDrawerLayout();
         initCategories();
         initProducts();
         initSlider();
+        setProductSearchAdapter();
 
-//
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//
-//        // Set a listener to handle the button click event
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // Do something when the button is clicked
-//                Toast.makeText(MainActivity.this, "Floating Action Button Clicked", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
         card = (ImageView) findViewById(R.id.iconCard);
         card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +94,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+    }
+
+    private List<Product> getListProduct() {
+        List<Product> list = new ArrayList<>();
+//        list.add(new Product());
+
+        return list;
 
     }
 
@@ -103,10 +126,8 @@ public class MainActivity extends AppCompatActivity {
     void initCategories(){
         categories = new ArrayList<>();
         categories.add(new Category("Các loại Tivi ngon ", "", "#18ab4e", "Some description", 1));
-        categories.add(new Category("Các loại Máy lạnh ngon", "", "#fb0504", "Some description", 1));
-//        categories.add(new Category("Các loại Máy giặt ngon", "", "#4186ff", "Some description", 1));
-//        categories.add(new Category("Các loại Máy lọc nước ngon", "", "#BF360C", "Some description", 1));
-        categories.add(new Category("Các loại Bếp ngon", "", "#ff870e", "Some description", 1));
+        categories.add(new Category("Các loại Máy lạnh ngon", "", "#fb0504", "Some description", 2));
+        categories.add(new Category("Các loại Bếp ngon", "", "#ff870e", "Some description", 3));
         categories.add(new Category("Khác", "", "#ff6f52", "Some description", 1));
 
 
@@ -136,16 +157,61 @@ public class MainActivity extends AppCompatActivity {
                     binding.productList.setLayoutManager(layoutManager);
                     binding.productList.setAdapter(productAdapter);
                 } else {
-                    // Xử lý lỗi nếu có
                 }
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                // Xử lý lỗi nếu có
+
             }
         });
 
+    }
+
+    public void setProductSearchAdapter() {
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("https://64085ddf8ee73db92e3eafad.mockapi.io/api/")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//        ProductApiService productApiService = retrofit.create(ProductApiService.class);
+//
+//        Call<List<Product>> call = productApiService.getProducts();
+//
+//        call.enqueue(new Callback<List<Product>>() {
+        ProductApiService.productApiService.getProducts().enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                if (response.isSuccessful()) {
+                    List<Product> productList = response.body();
+
+                    //set adapter
+                    atcProductSearch = findViewById(R.id.atc_product_search);
+                    SearchAdapter productSearchAdapter = new SearchAdapter(MainActivity.this, R.layout.item_search, productList);
+                    atcProductSearch.setAdapter(productSearchAdapter);
+
+//                     Sau khi chọn item search sẽ chuyển sang fragment detail
+                    atcProductSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                            ProductAdapter ab = new ProductAdapter(MainActivity.this, );
+                            Intent intent = new Intent(MainActivity.this, ProductDetailActivity.class);
+                            intent.putExtra("name", productList.get(position).getName());
+                            intent.putExtra("image", productList.get(position).getImage());
+                            intent.putExtra("price", productList.get(position).getPrice());
+                            intent.putExtra("status", productList.get(position).getStatus());
+                            MainActivity.this.startActivity(intent);
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Failed to retrieve data from API", Toast.LENGTH_SHORT).show();
+                Log.d("MYTAG", "onFailure: " + t.getMessage());
+            }
+        });
 
     }
 
