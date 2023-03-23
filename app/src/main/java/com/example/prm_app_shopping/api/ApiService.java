@@ -32,4 +32,6 @@ public interface ApiService {
 //    Call<Product> convertProduct();
 
     Call<List<Product>> getProducts();
+
+    Call<List<Product>> getAllusers();
 }

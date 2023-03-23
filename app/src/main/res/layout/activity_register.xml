@@ -41,8 +41,17 @@
             android:layout_height="14dp"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:hint=" Username" />
+            android:hint="Firstname"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/fullname"
+            android:layout_width="match_parent"
+            android:layout_height="14dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Lastname"
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/date"
@@ -52,15 +61,6 @@
             android:layout_weight="1"
             android:ems="10"
             android:inputType="date" />
-
-        <EditText
-            android:id="@+id/fullname"
-            android:layout_width="match_parent"
-            android:layout_height="14dp"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:hint=" Fullname" />
 
         <EditText
             android:id="@+id/password"
