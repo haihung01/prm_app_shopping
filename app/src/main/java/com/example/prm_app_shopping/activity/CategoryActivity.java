@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -24,6 +27,7 @@ import com.example.prm_app_shopping.databinding.ActivityCategoryBinding;
 import com.example.prm_app_shopping.databinding.ActivityMainBinding;
 import com.example.prm_app_shopping.model.Category;
 import com.example.prm_app_shopping.model.Product;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +44,7 @@ public class CategoryActivity extends AppCompatActivity {
     CategoryAdapter categoryAdapter;
     ImageView menu;
     AutoCompleteTextView atcProductSearch;
+    NavigationView navigationView;
 
 
     @Override
@@ -48,17 +53,59 @@ public class CategoryActivity extends AppCompatActivity {
         binding = ActivityCategoryBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        navigationView = findViewById(R.id.navigationView);
+        navigationView.bringToFront();
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.menuLogin: {
+                    startActivity(new Intent(CategoryActivity.this, Login.class));
+                    return true;
+                }
+                case R.id.menuHome: {
+                    startActivity(new Intent(CategoryActivity.this, MainActivity.class));
+                    return true;
+                }
+            }
+            return true;
+        });
+
         initProducts();
         initCategories();
         initDrawerLayout();
         setProductSearchAdapter();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.navigation_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId() ;
+        if(id == R.id.menuLogin) {
+
+            Intent intent = new Intent(CategoryActivity.this, Login.class);
+            startActivity(intent);
+            return true;
+        }
+        if(id == R.id.menuHome) {
+
+            Intent intent2 = new Intent(CategoryActivity.this, MainActivity.class);
+            startActivity(intent2);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
     void initCategories(){
         categories = new ArrayList<>();
         categories.add(new Category("Các loại Tivi ngon ", "", "#18ab4e", "Some description", 1));
         categories.add(new Category("Các loại Máy lạnh ngon", "", "#fb0504", "Some description", 2));
-//        categories.add(new Category("Các loại Máy giặt ngon", "", "#4186ff", "Some description", 1));
-//        categories.add(new Category("Các loại Máy lọc nước ngon", "", "#BF360C", "Some description", 1));
         categories.add(new Category("Các loại Bếp ngon", "", "#ff870e", "Some description", 3));
         categories.add(new Category("Tất cả", "", "#ff6f52", "Some description", 4));
 

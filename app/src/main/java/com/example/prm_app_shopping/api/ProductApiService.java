@@ -35,4 +35,5 @@ public interface ProductApiService {
 
     @GET("/categories/{id}/products")
     Call<List<Product>> getProductsByCategoryId(@Path("id") int categoryId);
+
 }

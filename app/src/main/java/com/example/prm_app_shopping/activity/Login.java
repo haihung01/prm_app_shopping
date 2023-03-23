@@ -52,8 +52,6 @@ public class Login extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 
     @Override
