@@ -50,7 +50,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         Cart cart = carts.get(position);
-        updateData(total());
+        updateData(cart.getTotal());
         Glide.with(context)
                 .load(cart.getProduct().getImage())
                 .into(holder.binding.image);
@@ -61,7 +61,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //chuyển đến trang detail của sản phẩm
                 Intent intent = new Intent(context, ProductDetailActivity.class);
                 intent.putExtra("name", cart.getProduct().getName());
                 intent.putExtra("image", cart.getProduct().getImage());
@@ -77,13 +76,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             @Override
             public void onClick(View v) {
                 int quantity = (int) cart.getProduct().getDiscount();
-                //kiểm tra số lượng sản phẩm tối thiểu mỗi cart là 1, tính
                 if (quantity > 1) {
                     holder.binding.quantity.setText(String.valueOf(quantity - 1));
                     cart.getProduct().setDiscount(quantity - 1);
-                    double total=0;
+                    double total=cart.getProduct().getPrice() * (quantity-1);
 
-                    SharedPreferences sharedPreferences = context.getSharedPreferences("CACHE", Context.MODE_PRIVATE);
+                    SharedPreferences sharedPreferences = context.getSharedPreferences("myCache", Context.MODE_PRIVATE);
                     String json = sharedPreferences.getString("cartsList", null);
                     Gson gson = new Gson();
                     if (json != null) {
@@ -96,7 +94,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                                 item.getProduct().setDiscount(item.getProduct().getDiscount() - 1);
                                 item.setTotal(item.getProduct().getPrice()*item.getProduct().getDiscount());
                             }
-                            total = total+(item.getProduct().getPrice()*item.getProduct().getDiscount());
                         }
                     }
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -115,9 +112,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 int quantity = (int) cart.getProduct().getDiscount();
                 holder.binding.quantity.setText(String.valueOf(quantity + 1));
                 cart.getProduct().setDiscount(quantity + 1);
-                double total=0;
+                double total=cart.getProduct().getPrice() * (quantity+1);
 
-                SharedPreferences sharedPreferences = context.getSharedPreferences("CACHE", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = context.getSharedPreferences("myCache", Context.MODE_PRIVATE);
                 String json = sharedPreferences.getString("cartsList", null);
                 Gson gson = new Gson();
                 if (json != null) {
@@ -130,7 +127,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                             item.getProduct().setDiscount(item.getProduct().getDiscount() + 1);
                             item.setTotal(item.getProduct().getPrice()*item.getProduct().getDiscount());
                         }
-                        total = total+(item.getProduct().getPrice()*item.getProduct().getDiscount());
                     }
                 }
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -150,12 +146,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                         .setMessage("Bạn có chắc chắn muốn xóa sản phẩm này không?")
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                double total=0;
+                                for (Cart item :
+                                        carts) {
+                                    total = total+ item.getTotal();
+                                }
                                 carts.remove(position);
                                 notifyDataSetChanged();
+                                updateData(total);
 
-                                updateData(total());
-
-                                SharedPreferences sharedPreferences = context.getSharedPreferences("CACHE", Context.MODE_PRIVATE);
+                                SharedPreferences sharedPreferences = context.getSharedPreferences("myCache", Context.MODE_PRIVATE);
                                 String json = sharedPreferences.getString("cartsList", null);
                                 Gson gson = new Gson();
                                 if (json != null) {
@@ -194,7 +194,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         return carts != null ? carts.size() : 0;
     }
 
-    //tạo interface để activity gọi
     public interface OnDataChangeListener {
         void onDataChanged(double data);
     }
@@ -210,14 +209,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         if (mListener != null) {
             mListener.onDataChanged(mData);
         }
-    }
-    private double total(){
-        double total=0;
-        for (Cart item :
-                carts) {
-            total = total+ item.getTotal();
-        }
-        return total;
     }
 
     public class CartViewHolder extends RecyclerView.ViewHolder {
@@ -238,8 +229,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             delete = itemView.findViewById(R.id.delete);
         }
     }
-
-    //kai báo các hàm cần thiết để tương tác với bộ nhớ cache
     public class MySharedPreferences {
         private SharedPreferences sharedPreferences;
 

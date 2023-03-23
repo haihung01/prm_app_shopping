@@ -1,30 +1,14 @@
 package com.example.prm_app_shopping.model;
 
 import java.util.Date;
-import java.util.List;
 
-public class Orders {
+public class orders {
     private String id;
     private String coustomerID;
-    private List<Cart> odersItem;
     private int orderStatus;
     private Date orderDate;
     private Date requiredDate;
     private Date shipDate;
-
-
-    public Orders() {
-    }
-
-    public Orders(String id, String coustomerID, List<Cart> odersItem, int orderStatus, Date orderDate, Date requiredDate, Date shipDate) {
-        this.id = id;
-        this.coustomerID = coustomerID;
-        this.odersItem = odersItem;
-        this.orderStatus = orderStatus;
-        this.orderDate = orderDate;
-        this.requiredDate = requiredDate;
-        this.shipDate = shipDate;
-    }
 
     public String getId() {
         return id;
@@ -40,14 +24,6 @@ public class Orders {
 
     public void setCoustomerID(String coustomerID) {
         this.coustomerID = coustomerID;
-    }
-
-    public List<Cart> getOdersItem() {
-        return odersItem;
-    }
-
-    public void setOdersItem(List<Cart> odersItem) {
-        this.odersItem = odersItem;
     }
 
     public int getOrderStatus() {
@@ -82,16 +58,15 @@ public class Orders {
         this.shipDate = shipDate;
     }
 
-    @Override
-    public String toString() {
-        return "orders{" +
-                "id='" + id + '\'' +
-                ", coustomerID='" + coustomerID + '\'' +
-                ", odersItem=" + odersItem +
-                ", orderStatus=" + orderStatus +
-                ", orderDate=" + orderDate +
-                ", requiredDate=" + requiredDate +
-                ", shipDate=" + shipDate +
-                '}';
+    public orders(String id, String coustomer, int orderStatus, Date orderDate, Date requiredDate, Date shipDate) {
+        this.id = id;
+        this.coustomerID = coustomer;
+        this.orderStatus = orderStatus;
+        this.orderDate = orderDate;
+        this.requiredDate = requiredDate;
+        this.shipDate = shipDate;
+    }
+
+    public orders() {
     }
 }

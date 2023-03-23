@@ -66,20 +66,16 @@ public class ProductDetailActivity extends AppCompatActivity {
 
 
     public void clickAdd(View view) {
-        //khai báo tạo cartList, cart mới với sản phẩm
         carts = new ArrayList<>();
         product.setDiscount(1);
         cart = new Cart(product.getId(), product.getPrice(), product);
-        //khai báo bộ nhớ cache
-        SharedPreferences sharedPreferences = getSharedPreferences("CACHE", Context.MODE_PRIVATE);
-        String json = sharedPreferences.getString("cartsList", null);// truy cập vùng nhớ cartList
+        SharedPreferences sharedPreferences = getSharedPreferences("myCache", Context.MODE_PRIVATE);
+        String json = sharedPreferences.getString("cartsList", null);
         Gson gson = new Gson();
-        //kiểm tra xem có vùng nhớ cartList không, nếu có tiếng hành update số lượng sản phẩm trong cartList đã được lấy ra, không thì thêm mới sản phẩm
         if (json != null) {
             Type type = new TypeToken<ArrayList<Cart>>() {
             }.getType();
             carts = gson.fromJson(json, type);
-
             boolean find = false;
             for (Cart item : carts
             ) {
@@ -97,20 +93,18 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
 
 
-        //cập nhật lại cartList trong bộ nhớ
         SharedPreferences.Editor editor = sharedPreferences.edit();
         json = gson.toJson(carts); // Chuyển đổi đối tượng thành chuỗi JSON
         editor.putString("cartsList", json);
         editor.apply();
 
-        //chuyển trang
         Toast.makeText(this, "Order has been placed. ", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(ProductDetailActivity.this, MainActivity.class));
         finish();
     }
 
 
-    // hàm gọi lại từ adapter để cập nhật tổng giá
+    // goi ten san pham tren header
     @Override
     public boolean onSupportNavigateUp() {
         finish();
