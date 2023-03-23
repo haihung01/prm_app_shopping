@@ -1,16 +1,28 @@
 package com.example.prm_app_shopping.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Users {
+    @SerializedName("customer_id")
     private String id;
+    @SerializedName("password")
     private String password;
+    @SerializedName("phone")
     private String phone;
+    @SerializedName("email")
     private String email;
+
+    @SerializedName("first_name")
+    private String firstName;
+    @SerializedName("last_name")
+    private String lastName;
+
     private String street;
     private String city;
     private String state;
     private String zip_code;
-    private String firstName;
-    private String lastName;
+
+
 
     public Users(String id, String password, String phone, String email, String street, String city, String state, String zip_code, String firstName, String lastName) {
         this.id = id;
@@ -106,5 +118,21 @@ public class Users {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id='" + id + '\'' +
+                ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", zip_code='" + zip_code + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }
