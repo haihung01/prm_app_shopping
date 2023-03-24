@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,12 +26,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>{
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> implements Filterable {
 
     private List<Product> mListProdcut;
+    private List<Product> mListProdcutOld;
+
 
     public ProductAdapter(List<Product> mListProdcut) {
         this.mListProdcut = mListProdcut;
+        this.mListProdcutOld = mListProdcut;
     }
 
 
@@ -83,7 +88,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         return products.size();
     }
 
-    public class ProductViewHolder extends RecyclerView.ViewHolder {
+    public class ProductViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView img;
         private TextView label, price;
@@ -98,5 +103,38 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             label = itemView.findViewById(R.id.label);
             price = itemView.findViewById(R.id.price);
         }
+    }
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String strSearch = constraint.toString();
+                if (strSearch.isEmpty()){
+                    mListProdcut = mListProdcutOld;
+                }else {
+                    List<Product> list = new ArrayList<>();
+                    for (Product products : mListProdcutOld) {
+                        if (products.getName().toLowerCase().contains(strSearch.toLowerCase())) {
+                            list.add(products);
+                        }
+                    }
+
+                    mListProdcutOld = list;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mListProdcut;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+
+                mListProdcut = (List<Product>) results.values;
+                notifyDataSetChanged();
+
+            }
+        };
     }
 }

@@ -38,9 +38,6 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnDat
 
         init();
 
-//       listview = (ListView) findViewById(R.id.cart_list);
-//        total = (TextView) findViewById(R.id.total_price);
-//        button = (Button) findViewById(R.id.checkout_button);
     }
 
 

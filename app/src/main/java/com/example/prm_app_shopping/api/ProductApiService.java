@@ -12,6 +12,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 
 public interface ProductApiService {
 
@@ -38,5 +39,6 @@ OkHttpClient client = new OkHttpClient.Builder()
 //    Call<Product> convertProduct();
 
     Call<List<Product>> getProducts();
-
+    @GET("/categories/{id}/products")
+    Call<List<Product>> getProductsByCategoryId(@Path("id") int categoryId);
 }

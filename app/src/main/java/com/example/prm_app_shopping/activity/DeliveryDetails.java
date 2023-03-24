@@ -1,19 +1,23 @@
 package com.example.prm_app_shopping.activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.prm_app_shopping.R;
 import com.example.prm_app_shopping.adapters.CartAdapter;
+import com.example.prm_app_shopping.api.OrderAPIService;
 import com.example.prm_app_shopping.databinding.ActivityCardBinding;
 import com.example.prm_app_shopping.databinding.ActivityDeliveryDetailsBinding;
 import com.example.prm_app_shopping.model.Cart;
@@ -26,10 +30,16 @@ import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DeliveryDetails extends AppCompatActivity {
 
+    EditText contact,zipCode,address;
     ArrayList<Cart> carts;
     CartAdapter CartAdapter;
     ActivityDeliveryDetailsBinding binding;
@@ -53,61 +63,31 @@ public class DeliveryDetails extends AppCompatActivity {
             carts = gson.fromJson(json, type);
         }
 
+        binding.email.getEditText().setText(customer.getPhone());
+        binding.zipCode.getEditText().setText(customer.getZip_code());
+        binding.addrees.getEditText().setText(customer.getState()+"/"+customer.getCity()+"/"+customer.getStreet());
         CartAdapter = new CartAdapter(this, carts);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         binding.orderItems.setLayoutManager(layoutManager);
         binding.orderItems.setAdapter(CartAdapter);
-        EditText editText = findViewById(R.id.edit_text);
-
-// Thiết lập sự kiện khi EditText được chạm vào
-        editText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Lấy ngày giờ hiện tại để đặt làm ngày mặc định cho DatePickerDialog
-                Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-                // Khởi tạo và hiển thị DatePickerDialog
-                DatePickerDialog datePickerDialog = new DatePickerDialog(DeliveryDetails.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                // Lưu ngày được chọn vào một đối tượng Calendar
-                                Calendar selectedCalendar = Calendar.getInstance();
-                                selectedCalendar.set(year, monthOfYear, dayOfMonth);
-
-                                // Lấy giá trị của EditText và xử lý
-                                String userInput = editText.getText().toString();
-                                // TODO: Xử lý giá trị được nhập từ người dùng
-
-                                // Định dạng ngày giờ và hiển thị trên EditText
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                                        String selectedDate = sdf.format(selectedCalendar.getTime());
-                                        editText.post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                editText.setText(selectedDate);
-                                            }
-                                        });
-                                    }
-                                }).start();
-                            }
-                        }, year, month, day);
-                datePickerDialog.show();
-            }
-        });
-
 
         binding.finalcheckoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Orders oder = new Orders(generateRandomString(8),String.valueOf(customer.getId()),carts,0,null,null,null);
-                Log.d("log-note",oder.toString());
+                Orders oder = new Orders(generateRandomString(8),String.valueOf(customer.getId()),carts,0, new Date(),null,null);
+                OrderAPIService.OrderApiService.addAOrder(oder,customer.getId()).enqueue(new Callback<Orders>() {
+                    @Override
+                    public void onResponse(Call<Orders> call, Response<Orders> response) {
+                        Toast.makeText(DeliveryDetails.this, "Order Success.", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(DeliveryDetails.this, MainActivity.class));
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Orders> call, Throwable t) {
+                        showWrongPasswordAlert("Order Not Success.");
+                    }
+                });
             }
         });
     }
@@ -124,5 +104,13 @@ public class DeliveryDetails extends AppCompatActivity {
 
             return sb.toString();
         }
+    private void showWrongPasswordAlert(String mess) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thông báo");
+        builder.setMessage(mess);
+        builder.setPositiveButton("Close", null);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
 
 }
