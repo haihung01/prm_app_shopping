@@ -19,13 +19,14 @@
             android:text="20/12/2022" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/item_cart_history"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/total_price3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="37dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="5dp"

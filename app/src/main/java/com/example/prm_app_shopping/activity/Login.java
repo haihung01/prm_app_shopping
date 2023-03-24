@@ -98,9 +98,9 @@ public class Login extends AppCompatActivity {
 
                 }
                 if (!usersfound) {
-                    if (listUsers.size()==0){
+                    if (listUsers.size() == 0) {
                         showWrongPasswordAlert("không thể kết nối với server, vui lòng thử lại");
-                    }else {
+                    } else {
                         showWrongPasswordAlert("không tìm thấy thông tin người dùng");
                     }
                 }

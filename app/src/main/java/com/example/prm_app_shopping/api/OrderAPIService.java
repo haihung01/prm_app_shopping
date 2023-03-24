@@ -27,7 +27,7 @@ public interface OrderAPIService {
             .build()
             .create(OrderAPIService.class);
 
-    @GET("customers/:id/orders")
+    @GET("customers/{id}/orders")
     Call<List<Orders>> getHistory(@Path("id") int UserID);
 
     @POST("/customers/{id}/orders")
