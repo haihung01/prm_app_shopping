@@ -31,7 +31,7 @@
 
             <AutoCompleteTextView
                 android:id="@+id/atc_product_search"
-                android:layout_width="205dp"
+                android:layout_width="245dp"
                 android:layout_height="40dp"
                 android:layout_below="@+id/circle_indicator"
                 android:layout_centerInParent="true"
