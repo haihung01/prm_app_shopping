@@ -29,17 +29,6 @@
                 android:layout_marginRight="8dp"
                 android:src="@drawable/ic_menu" />
 
-<!--            <com.mancj.materialsearchbar.MaterialSearchBar-->
-<!--                android:id="@+id/searchBar"-->
-<!--                style="@style/MaterialSearchBarLight"-->
-<!--                android:layout_width="240dp"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:mt_hint="Seach your favorite product"-->
-<!--                app:mt_maxSuggestionsCount="10"-->
-<!--                app:mt_navIconEnabled="false"-->
-<!--                app:mt_placeholder="Search"-->
-<!--                app:mt_speechMode="true" />-->
-
             <AutoCompleteTextView
                 android:id="@+id/atc_product_search"
                 android:layout_width="245dp"

@@ -1,6 +1,7 @@
 package com.example.prm_app_shopping.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,14 +13,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.prm_app_shopping.R;
 import com.example.prm_app_shopping.adapters.CategoryAdapter;
@@ -32,17 +28,17 @@ import com.example.prm_app_shopping.model.Category;
 import com.example.prm_app_shopping.model.Product;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.imaginativeworld.whynotimagecarousel.model.CarouselItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,16 +47,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Category> categories;
     ProductAdapter productAdapter;
     NavigationView navigationView;
-    private DrawerLayout drawerLayout;
-
-
     ImageView card, history, menu;
-    androidx.recyclerview.widget.RecyclerView rcvProduct;
-
-    MenuItem itemHome;
     AutoCompleteTextView atcProductSearch;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,27 +56,19 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        rcvProduct = findViewById(R.id.productList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rcvProduct.setLayoutManager(linearLayoutManager);
-
-        productAdapter = new ProductAdapter(getListProduct());
-//        rcvProduct.setAdapter(productAdapter);
-//
-//        RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-//        rcvProduct.addItemDecoration(itemDecoration);
-
         navigationView = findViewById(R.id.navigationView);
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.menuLogin: {
-//                    drawerLayout.close();
+                case R.id.menuLogout: {
+                    SharedPreferences sharedPreferences = getSharedPreferences("CACHE", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.remove("USERS");
+                    editor.apply();
                     startActivity(new Intent(MainActivity.this, Login.class));
                     return true;
                 }
                 case R.id.menuHome: {
-//                    drawerLayout.close();
                     startActivity(new Intent(MainActivity.this, MainActivity.class));
                     return true;
                 }
@@ -96,13 +76,11 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
-        initDrawerLayout();
         initCategories();
         initProducts();
         initSlider();
+        initDrawerLayout();
         setProductSearchAdapter();
-//        onOptionsItemSelected();
-//        menuHome();
 
         card = (ImageView) findViewById(R.id.iconCard);
         card.setOnClickListener(new View.OnClickListener() {
@@ -117,33 +95,22 @@ public class MainActivity extends AppCompatActivity {
         history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,History.class);
+                Intent intent = new Intent(MainActivity.this, History.class);
                 startActivity(intent);
             }
         });
 
     }
 
-    private List<Product> getListProduct() {
-        List<Product> list = new ArrayList<>();
-//        list.add(new Product());
-
-        return list;
-
-    }
-
-    private  void initDrawerLayout(){
+    private void initDrawerLayout() {
         menu = (ImageView) findViewById(R.id.iconMenu);
         menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 binding.getRoot().openDrawer(GravityCompat.START);
-
             }
         });
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -153,22 +120,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-         int id = item.getItemId() ;
-         if(id == R.id.menuLogin) {
+        int id = item.getItemId() ;
+        if(id == R.id.menuLogout) {
 
-             Intent intent = new Intent(MainActivity.this, Login.class);
-             startActivity(intent);
-             return true;
-         }
-         if(id == R.id.menuHome) {
+            Intent intent = new Intent(MainActivity.this, Login.class);
+            startActivity(intent);
+            return true;
+        }
+        if(id == R.id.menuHome) {
 
-             Intent intent2 = new Intent(MainActivity.this, MainActivity.class);
-             startActivity(intent2);
-             return true;
-         }
+            Intent intent2 = new Intent(MainActivity.this, MainActivity.class);
+            startActivity(intent2);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
-
 
     private void initSlider() {
         binding.carousel.addData(new CarouselItem("https://tinhte.vn/store/2017/01/3949514_CV.png", "Tu lanh Panasonic promax"));
@@ -178,12 +144,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    void initCategories(){
+    void initCategories() {
         categories = new ArrayList<>();
         categories.add(new Category("Các loại Tivi ngon ", "", "#18ab4e", "Some description", 1));
         categories.add(new Category("Các loại Máy lạnh ngon", "", "#fb0504", "Some description", 2));
         categories.add(new Category("Các loại Bếp ngon", "", "#ff870e", "Some description", 3));
-        categories.add(new Category("Khác", "", "#ff6f52", "Some description", 1));
+        categories.add(new Category("Khác", "", "#ff6f52", "Some description", 4));
 
 
         categoryAdapter = new CategoryAdapter(this, categories);
@@ -195,15 +161,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    void initProducts(){
+    void initProducts() {
         ArrayList<Product> productsList = new ArrayList<>();
+        SharedPreferences sharedPreferences = getSharedPreferences("CACHE", MODE_PRIVATE);
+        String cachedProducts = sharedPreferences.getString("PRODUCTS_LIST", null);
+        //call api
         ProductApiService.productApiService.getProducts().enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 if (response.isSuccessful()) {
                     List<Product> productList = response.body();
                     productsList.addAll(productList);
+                    //lưu dữ liệu vào bộ nhớ cache
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    String productsJson = new Gson().toJson(productsList);
+                    editor.putString("PRODUCTS_LIST", productsJson);
+                    editor.apply();
                     // Tiếp tục xử lý danh sách sản phẩm tại đây
 
                     productAdapter = new ProductAdapter(MainActivity.this, productsList);
@@ -212,17 +185,33 @@ public class MainActivity extends AppCompatActivity {
                     binding.productList.setLayoutManager(layoutManager);
                     binding.productList.setAdapter(productAdapter);
                 } else {
+                    // Xử lý lỗi nếu có
+                    // tải lại danh sách dữ liệu từ bộ nhớ
+                    List<Product> productsList = new Gson().fromJson(cachedProducts, new TypeToken<List<Product>>() {
+                    }.getType());
+                    //tạo màn hình
+                    productAdapter = new ProductAdapter(MainActivity.this, (ArrayList<Product>) productsList);
+                    GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
+                    binding.productList.setLayoutManager(layoutManager);
+                    binding.productList.setAdapter(productAdapter);
                 }
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-
+                // Xử lý lỗi nếu có
+                // tải lại danh sách dữ liệu từ bộ nhớ
+                List<Product> productsList = new Gson().fromJson(cachedProducts, new TypeToken<List<Product>>() {
+                }.getType());
+                productAdapter = new ProductAdapter(MainActivity.this, (ArrayList<Product>) productsList);
+                GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 2);
+                binding.productList.setLayoutManager(layoutManager);
+                binding.productList.setAdapter(productAdapter);
             }
         });
 
-    }
 
+    }
     public void setProductSearchAdapter() {
 
         ProductApiService.productApiService.getProducts().enqueue(new Callback<List<Product>>() {
@@ -236,11 +225,9 @@ public class MainActivity extends AppCompatActivity {
                     SearchAdapter productSearchAdapter = new SearchAdapter(MainActivity.this, R.layout.item_search, productList);
                     atcProductSearch.setAdapter(productSearchAdapter);
 
-//                     Sau khi chọn item search sẽ chuyển sang fragment detail
                     atcProductSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                            ProductAdapter ab = new ProductAdapter(MainActivity.this, );
                             Intent intent = new Intent(MainActivity.this, ProductDetailActivity.class);
                             intent.putExtra("name", productList.get(position).getName());
                             intent.putExtra("image", productList.get(position).getImage());
@@ -256,7 +243,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "Failed to retrieve data from API", Toast.LENGTH_SHORT).show();
-                Log.d("MYTAG", "onFailure: " + t.getMessage());
             }
         });
 
