@@ -8,7 +8,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -16,7 +15,6 @@ import com.example.prm_app_shopping.R;
 import com.example.prm_app_shopping.api.UsersApiService;
 import com.example.prm_app_shopping.model.Users;
 import com.google.gson.Gson;
-import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +52,7 @@ public class Login extends AppCompatActivity {
                     ) {
                         if (customer.getEmail().equals(u.getEmail())) {
                             if (customer.getPassword().equals(u.getPassword())) {
-                                Intent intent = new Intent(Login.this, MainActivity.class);
+                                Intent intent = new Intent(Login.this, HomeActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {
@@ -90,7 +88,7 @@ public class Login extends AppCompatActivity {
                         } else {
                             usersfound = true;
                             customer = user;
-                            Intent intent = new Intent(Login.this, MainActivity.class);
+                            Intent intent = new Intent(Login.this, HomeActivity.class);
                             startActivity(intent);
                         }
                         break;

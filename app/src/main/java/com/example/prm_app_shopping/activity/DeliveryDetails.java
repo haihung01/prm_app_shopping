@@ -4,21 +4,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.prm_app_shopping.R;
 import com.example.prm_app_shopping.adapters.CartAdapter;
 import com.example.prm_app_shopping.api.OrderAPIService;
-import com.example.prm_app_shopping.databinding.ActivityCardBinding;
 import com.example.prm_app_shopping.databinding.ActivityDeliveryDetailsBinding;
 import com.example.prm_app_shopping.model.Cart;
 import com.example.prm_app_shopping.model.Orders;
@@ -27,9 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -78,8 +70,11 @@ public class DeliveryDetails extends AppCompatActivity {
                 OrderAPIService.OrderApiService.addAOrder(oder,customer.getId()).enqueue(new Callback<Orders>() {
                     @Override
                     public void onResponse(Call<Orders> call, Response<Orders> response) {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.remove("cartsList");
+                        editor.apply();
                         Toast.makeText(DeliveryDetails.this, "Order Success.", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(DeliveryDetails.this, MainActivity.class));
+                        startActivity(new Intent(DeliveryDetails.this, HomeActivity.class));
                         finish();
                     }
 

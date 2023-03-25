@@ -17,14 +17,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.prm_app_shopping.R;
-import com.example.prm_app_shopping.adapters.CategoryAdapter;
 import com.example.prm_app_shopping.adapters.ProductAdapter;
 import com.example.prm_app_shopping.adapters.SearchAdapter;
 import com.example.prm_app_shopping.api.CategoryApiService;
 import com.example.prm_app_shopping.api.ProductApiService;
 import com.example.prm_app_shopping.databinding.ActivityCategoryBinding;
-import com.example.prm_app_shopping.databinding.ActivityMainBinding;
-import com.example.prm_app_shopping.model.Category;
 import com.example.prm_app_shopping.model.Product;
 import com.google.android.material.navigation.NavigationView;
 
@@ -59,7 +56,7 @@ public class CategoryActivity extends AppCompatActivity {
                     return true;
                 }
                 case R.id.menuHome: {
-                    startActivity(new Intent(CategoryActivity.this, MainActivity.class));
+                    startActivity(new Intent(CategoryActivity.this, HomeActivity.class));
                     return true;
                 }
             }
@@ -107,7 +104,7 @@ public class CategoryActivity extends AppCompatActivity {
         }
         if(id == R.id.menuHome) {
 
-            Intent intent2 = new Intent(CategoryActivity.this, MainActivity.class);
+            Intent intent2 = new Intent(CategoryActivity.this, HomeActivity.class);
             startActivity(intent2);
             return true;
         }

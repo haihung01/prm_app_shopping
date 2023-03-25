@@ -64,7 +64,6 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnDat
             public void onClick(View v) {
                 //kiểm tra người dùng có tồn tại trong sesion không
                 SharedPreferences sharedPreferences = getSharedPreferences("CACHE", MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
                 String cachedUsers = sharedPreferences.getString("USERS", null);
                 Users customer = new Gson().fromJson(cachedUsers, Users.class);
                 Intent intent;

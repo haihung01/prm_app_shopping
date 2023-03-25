@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -105,7 +104,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         //chuyển trang
         Toast.makeText(this, "Order has been placed. ", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(ProductDetailActivity.this, MainActivity.class));
+        startActivity(new Intent(ProductDetailActivity.this, HomeActivity.class));
         finish();
     }
 

@@ -3,8 +3,11 @@ package com.example.prm_app_shopping.activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.example.prm_app_shopping.adapters.HistoryAdapter;
 import com.example.prm_app_shopping.api.OrderAPIService;
@@ -56,5 +59,14 @@ public class History extends AppCompatActivity {
         GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
         binding.historyItem.setLayoutManager(layoutManager);
         binding.historyItem.setAdapter(historyAdapter);
+
+        binding.imageView15.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(History.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }
