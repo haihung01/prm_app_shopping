@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.prm_app_shopping.adapters.CartAdapter;
+import com.example.prm_app_shopping.api.UsersApiService;
 import com.example.prm_app_shopping.databinding.ActivityCardBinding;
 import com.example.prm_app_shopping.model.Cart;
 import com.example.prm_app_shopping.model.Users;
@@ -29,12 +30,18 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnDat
     Cart cart;
     CartAdapter CartAdapter;
     ActivityCardBinding binding;
+    Users customer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCardBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        SharedPreferences sharedPreferences = getSharedPreferences("CACHE", MODE_PRIVATE);
+        String cachedUsers = sharedPreferences.getString("USERS", null);
+        customer = new Gson().fromJson(cachedUsers, Users.class);
+        UsersApiService.UsersApiService.getProduct(Integer.parseInt(customer.getId()));
 
         init();
 
@@ -62,10 +69,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnDat
         binding.checkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //kiểm tra người dùng có tồn tại trong sesion không
-                SharedPreferences sharedPreferences = getSharedPreferences("CACHE", MODE_PRIVATE);
-                String cachedUsers = sharedPreferences.getString("USERS", null);
-                Users customer = new Gson().fromJson(cachedUsers, Users.class);
+                //kiểm tra người dùng có tồn tại trong bộ nhớ được cấp không
                 Intent intent;
                 if (customer == null) {
                     intent = new Intent(CartActivity.this, Login.class);
